@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException,ClassNotFoundException,IllegalAccessException,InstantiationException,NoSuchMethodException,InvocationTargetException
     {
         AtlasLoader loader=new AtlasLoader();
-        Class e=loader.loadClass("TestCLass");
+        Class e=loader.loadClass("TestClass");
         Object o = e.newInstance();
         Method d=o.getClass().getMethod("hey");
         d.invoke(o);
@@ -17,7 +17,7 @@ public class Main {
 
         e=null;
         System.gc();
-        loader.removeClass(p,true);//remove from memory
+        loader.removeClass(p);//remove from memory
         System.gc();
 
     }

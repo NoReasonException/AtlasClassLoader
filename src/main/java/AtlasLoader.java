@@ -28,7 +28,7 @@
  */
 
 
-import main.singleclassloader.SingleClassLoader;
+import singleClassClassLoader.SingleClassLoader;
 
 import java.lang.ref.WeakReference;
 import java.util.Hashtable;
@@ -97,7 +97,6 @@ public class AtlasLoader extends ClassLoader{
      * @return true in success
      */
     public boolean removeClass(String name){
-        System.out.println(classes.get(name).getSingleClass().toString());
         return removeClass(name,false);
 
     }

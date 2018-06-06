@@ -1,6 +1,6 @@
-package main.singleclassloader;
+package singleClassClassLoader;
 
-import main.singleclassloader.error.AlreadyLoadedClassException;
+import singleClassClassLoader.error.AlreadyLoadedClassException;
 
 public class SingleClassLoader extends ClassLoader {
     Class<?> singleClass                =null;
@@ -15,29 +15,21 @@ public class SingleClassLoader extends ClassLoader {
 
         return singleClass;
     }
-
-    public SingleClassLoader() {
-        this(null);
-    }
-
-    public SingleClassLoader(ClassLoader classLoader) {
-        super(null);
-    }
-
+    /***
+     * Only one class Is allowed (with depedencies!)
+     * @param s the class string
+     * @return the Class object
+     * @throws ClassNotFoundException if not found
+     * @throws AlreadyLoadedClassException if loadClass is called for more than 1 time
+     */
     @Override
     public Class<?> loadClass(String s) throws ClassNotFoundException {
         try{
             super.findSystemClass(s);
         }catch (ClassNotFoundException e){;}
-        return super.loadClass(s,resolveFlag);
-
-    }
-
-    @Override
-    protected Class<?> findClass(String s) throws ClassNotFoundException {
         if(haveAlreadyLoadClass) throw new AlreadyLoadedClassException();
-        singleClass= super.findClass(s);
-        return singleClass;
-    }
+        haveAlreadyLoadClass=true;
+        return singleClass=super.loadClass(s,resolveFlag);
 
+    }
 }
