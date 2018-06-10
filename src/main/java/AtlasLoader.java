@@ -30,8 +30,12 @@
 
 import singleClassClassLoader.SingleClassLoader;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.Hashtable;
+import java.net.URL;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 public class AtlasLoader extends ClassLoader{
     private Hashtable<String, SingleClassLoader> classes;
@@ -147,5 +151,125 @@ public class AtlasLoader extends ClassLoader{
     @Override
     protected Class<?> findClass(String s) throws ClassNotFoundException {
         return this.loadClass(s);
+    }
+
+    /* from now on the implementations just call the methods in the Corresponding SingleClassLoader*/
+
+    @Override
+    public URL getResource(String s) {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.getResource(s);
+    }
+
+    @Override
+    public Enumeration<URL> getResources(String s) throws IOException {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.getResources(s);
+    }
+
+    @Override
+    protected URL findResource(String s) {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.findResource(s);
+    }
+
+    @Override
+    protected Enumeration<URL> findResources(String s) throws IOException {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.findResources(s);
+    }
+
+    @Override
+    public InputStream getResourceAsStream(String s) {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.getResourceAsStream(s);
+    }
+
+    @Override
+    protected Package definePackage(String s, String s1, String s2, String s3, String s4, String s5, String s6, URL url) throws IllegalArgumentException {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.definePackage(s,s1,s2,s3,s4,s5,s6,url);
+    }
+
+    @Override
+    protected Package getPackage(String s) {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.getPackage(s);
+    }
+
+    @Override
+    protected Package[] getPackages() {
+        ArrayList<Package> pack=new ArrayList<>();
+        Enumeration<String> stringEnumeration=classes.keys();
+        String tmp;
+        SingleClassLoader tmpklassloader;
+        while(stringEnumeration.hasMoreElements()){
+            tmp=stringEnumeration.nextElement();
+            tmpklassloader=classes.get(tmp);
+            pack.addAll(Arrays.asList(tmpklassloader.getPackage(tmp)));
+        }
+        return (Package[]) pack.toArray();
+    }
+
+    @Override
+    protected String findLibrary(String s) {
+        SingleClassLoader klassLoader ;
+        if((klassLoader=classes.get(s))==null)return null;
+        return klassLoader.findLibrary(s);
+    }
+
+    @Override
+    public void setDefaultAssertionStatus(boolean b) {
+        Enumeration<String> stringEnumeration=classes.keys();
+        String tmp;
+        SingleClassLoader tmpklassloader;
+        while(stringEnumeration.hasMoreElements()){
+            tmp=stringEnumeration.nextElement();
+            tmpklassloader=classes.get(tmp);
+            tmpklassloader.setDefaultAssertionStatus(b);
+        }
+    }
+
+    @Override
+    public void setPackageAssertionStatus(String s, boolean b) {
+        Enumeration<String> stringEnumeration=classes.keys();
+        String tmp;
+        SingleClassLoader tmpklassloader;
+        while(stringEnumeration.hasMoreElements()){
+            tmp=stringEnumeration.nextElement();
+            tmpklassloader=classes.get(tmp);
+            tmpklassloader.setPackageAssertionStatus(s,b);
+        }
+    }
+
+    @Override
+    public void setClassAssertionStatus(String s, boolean b) {
+        Enumeration<String> stringEnumeration=classes.keys();
+        String tmp;
+        SingleClassLoader tmpklassloader;
+        while(stringEnumeration.hasMoreElements()){
+            tmp=stringEnumeration.nextElement();
+            tmpklassloader=classes.get(tmp);
+            tmpklassloader.setClassAssertionStatus(s,b);
+        }
+    }
+
+    @Override
+    public void clearAssertionStatus() {
+        Enumeration<String> stringEnumeration=classes.keys();
+        String tmp;
+        SingleClassLoader tmpklassloader;
+        while(stringEnumeration.hasMoreElements()){
+            tmp=stringEnumeration.nextElement();
+            tmpklassloader=classes.get(tmp);
+            tmpklassloader.clearAssertionStatus();
+        }
     }
 }
