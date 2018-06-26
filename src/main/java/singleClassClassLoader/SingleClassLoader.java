@@ -30,7 +30,7 @@ public class SingleClassLoader extends ClassLoader {
     @Override
     public Class<?> loadClass(String s) throws ClassNotFoundException {
         try{
-            super.findSystemClass(s);
+            return super.findSystemClass(s);
         }catch (ClassNotFoundException e){;}
         if(haveAlreadyLoadClass) throw new AlreadyLoadedClassException();
         haveAlreadyLoadClass=true;
